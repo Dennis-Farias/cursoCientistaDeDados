@@ -1,0 +1,85 @@
+Limpeza e Tratamento de Dados em R
+Domínio
+Aparência: sol, nublado, chuva
+Temperatura: -130 ~ 130 F
+Umidade: 0 ~ 100
+Jogar: sim/não
+Vento: falso/verdadeiro
+```{r}
+dados = read.csv('tempo.csv', sep = ";", na.strings = "", stringsAsFactors = T)
+head(dados)
+summary(dados)
+```
+Explorar dados, colunas categóricas
+```{r}
+# Aparência
+counts = table(dados$Aparencia)
+barplot(counts, main="Aparência", xlab="Aparência")
+# Vento
+counts = table(dados$Vento)
+barplot(counts, main="Vento", xlab = "Vento")
+# Jogar
+counts = table(dados$Jogar)
+barplot(counts, main = "Jogar", xlab = "Jogar")
+```
+Explorar, colunas númericas
+```{r}
+# Temperatura
+summary(dados$Temperatura)
+boxplot(dados$Temperatura)
+hist(dados$Temperatura)
+# Umidade 
+summary(dados$Umidade)
+boxplot(dados$Umidade)
+hist(dados$Umidade)
+```
+Valores faltantes
+```{r}
+dados[!complete.cases(dados),]
+```
+Tratar aparência, existe um dado "menos" que está fora do domínio
+```{r}
+unique(dados$Aparencia)
+summary(dados$Aparencia)
+# Preencher com a moda = sol
+dados[dados$Aparencia == "menos",]$Aparencia = "sol"
+# Remover fatores não usados
+dados$Aparencia = factor(dados$Aparencia)
+```
+Tratar temperatura, existem valores fora do domínio
+```{r}
+summary(dados$Temperatura)
+unique(dados$Temperatura)
+# fora do domínio
+dados[dados$Temperatura > 130 | dados$Temperatura < -130,]$Temperatura
+median(dados$Temperatura)
+# substituir com a mediana
+dados[dados$Temperatura > 130 | dados$Temperatura < -130,]$Temperatura = median(dados$Temperatura)
+```
+Tratar umidade, existem valores NA e fora do domínio
+```{r}
+summary(dados$Umidade)
+# Valores fora de domínio
+dados[dados$Umidade > 100 | dados$Umidade < 0, ]$Umidade 
+# Valores NA
+dados[is.na(dados$Umidade),]$Umidade
+# Mediana
+median(dados$Umidade, na.rm = T)
+# Atribuir mediana a NA
+dados[is.na(dados$Umidade), ]$Umidade = median(dados$Umidade, na.rm = T)
+# Atribuir mediana a valores fora de domínio
+dados[dados$Umidade > 100 | dados$Umidade < 0, ]$Umidade = median(dados$Umidade, na.rm = T)
+# Ver resultado 
+dados[dados$Umidade > 100 | dados$Umidade < 0, ]$Umidade 
+summary(dados$Umidade)
+```
+Tratar vento, valores NA
+```{r}
+summary(dados$Vento)
+unique(dados$Vento)
+# Valor NA
+dados[is.na(dados$Vento), ]
+# Substituir pela moda = falso
+dados[is.na(dados$Vento), ]$Vento = "FALSO"
+```
+
