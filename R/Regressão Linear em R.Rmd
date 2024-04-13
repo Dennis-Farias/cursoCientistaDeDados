@@ -1,0 +1,43 @@
+Regressão Linear
+
+Criar um modelo de regressão linear para prever qual será o Investimento inicial necessário de uma franquia a partir da Taxa Anual cobrado pelo franqueador
+
+```{r}
+dados = read.csv("slr12.csv", sep = ';')
+dados
+```
+
+Correlação
+
+```{r}
+cor(dados)
+```
+
+Modelo
+
+```{r}
+modelo = lm(CusInic ~ FrqAnual, data=dados)
+modelo
+```
+
+Visualização da relação entre variáveis e linha de melhor ajuste
+
+```{r}
+plot(CusInic ~ FrqAnual, data = dados, ylab = 'Custo Inicial', xlab = 'Taxa anual', main = 'Franquia')
+abline(modelo)
+```
+
+Prevendo o custo inicial com uma taxa anual de 950
+
+```{r}
+predict(modelo, data.frame(FrqAnual=1300))
+```
+
+Verificando os resíduos
+
+```{r}
+hist(modelo$residuals)
+```
+
+
+
