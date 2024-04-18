@@ -30,7 +30,7 @@ abline(modelo)
 Prevendo o custo inicial com uma taxa anual de 950
 
 ```{r}
-predict(modelo, data.frame(FrqAnual=1300))
+predict(modelo, data.frame(FrqAnual=950))
 ```
 
 Verificando os resíduos
