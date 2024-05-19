@@ -1,0 +1,38 @@
+Modelo de Machine Learning utilizando a biblioteca Random Forest para fazer o diagnóstico de doenças em soja
+```{r}
+# Carregando dados e biblioteca
+library(randomForest)
+dados = read.csv('soybean.csv')
+dados
+# Transformar classe em fator
+dados$class = as.factor(dados$class)
+head(dados)
+dim(dados)
+# Classes
+unique(dados$class)
+```
+Separando dados de treino e teste
+```{r}
+amostra = sample(2, 683, replace = T, prob = c(0.7, 0.3))
+dadostreino = dados[amostra==1,]
+dadosteste = dados[amostra==2,]
+dim(dadostreino)
+dim(dadosteste)
+```
+Gerando o modelo
+```{r}
+modelo = randomForest(class ~ ., data=dadostreino, ntree=100, importance=T)
+modelo
+plot(modelo)
+```
+Previsão
+```{r}
+previsao = predict(modelo, dadosteste)
+previsao
+modelo$confusion
+```
+Avaliação de perfomance
+```{r}
+1- mean(modelo$confusion[, 'class.error'])
+```
+
